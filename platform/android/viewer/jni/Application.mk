@@ -6,10 +6,14 @@
 #APP_PLATFORM=android-8
 #APP_ABI := armeabi
 
+# rallyemax: arm64-v8a, minimum platform is 21 (4.4W and 5.0)
+APP_PLATFORM=android-21
+APP_ABI := arm64-v8a
+
 # Version X+1: armeabi-v7a (Much faster due to the availability of hardware
 # FP, but cannot be run in the emulator).
-APP_PLATFORM=android-8
-APP_ABI := armeabi-v7a
+#APP_PLATFORM=android-8
+#APP_ABI := armeabi-v7a
 
 # Version X+2: x86 (Requires android-9, so a change needs to be made in
 # AndroidManifest.xml too)

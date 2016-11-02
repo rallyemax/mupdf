@@ -1,5 +1,37 @@
 To build/debug android viewer.
 
+==== rallyemax
+ - mv local.properties.sample to local.properties and enter paths
+ - add gradle wrapper:
+    - rename build.gradle to something temporary
+    - gradle wrapper --gradle-version 2.2
+    - rename build.gradle.tmp back
+ - increase max zoom (src/com/artifex/mupdfdemo/ReaderView.java)
+    (orig:)private static final float MAX_SCALE        = 64.0f;     
+    (new:) private static final float MAX_SCALE        = 128.0f;
+ - change to arm64 (min platform is 21):
+    - jni/Application.mk:
+        APP_PLATFORM=android-21
+        APP_ABI := arm64-v8a     
+ - change sdk to 21 in the following as well:
+    - AndroidManifest.xml
+        <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="21"/>
+    - build.gradle
+        compileSdkVersion 21
+ - since arm64 uses clang, escape incbin definition in fontdump.c, which isn't supported:
+    - mupdf/scripts/fontdump.c:
+        (orig:)fprintf(fo, "#if !defined(__ICC)\n");
+        (new:) fprintf(fo, "#if !defined(__ICC) && !defined(__clang__)\n");
+        [[next line defines HAVE_INCBIN]]
+
+ - building:
+    - in root mupdf: git submodule update --init
+    - in root mupdf: make
+    - in platform/android/viewer: ./gradlew build
+ 
+ - result: faster rendering on arm64 device, increased max zoom
+==== end rallyemax
+
 NOTE: Using Android Studio.
 
 The easiest way to get the required SDK and NDK tools is to download
